@@ -1,4 +1,4 @@
-package com.eludika.app.ws.services; // :D
+package com.eludika.app.ws.services;
 
 import com.eludika.app.ws.exceptions.AutenticacaoException;
 import com.eludika.app.ws.exceptions.ImpossivelAtualizarRegistroException;
@@ -47,7 +47,7 @@ public class UsuarioServiceImplementation implements UsuarioService {
      * @param usuario DTO com os dados do novo usuário
      */
     @Override
-    public void criarUsuario(Usuario/*:O*/ usuario) {
+    public void criarUsuario(Usuario usuario) {
 
         /* Validação dos campos obrigatórios */
         this.eludikaUtils.validarCamposObrigatorios(usuario);
@@ -75,13 +75,13 @@ public class UsuarioServiceImplementation implements UsuarioService {
     }
     
     @Override
-    public void atualizarUsuario(String idExterno, Usuario/*:O*/ requisicaoFiltrada) {
+    public void atualizarUsuario(String idExterno, Usuario requisicaoFiltrada) {
         
         try {
             
             this.usuarioDAO.abrirConexao();
             
-            Usuario/*:O*/ usuarioArmazenado = this.usuarioDAO.obterUsuario(idExterno);
+            Usuario usuarioArmazenado = this.usuarioDAO.obterUsuario(idExterno);
             this.validarAtualizacao(requisicaoFiltrada, usuarioArmazenado);
             this.usuarioDAO.atualizarUsuario(usuarioArmazenado);
 
@@ -104,9 +104,9 @@ public class UsuarioServiceImplementation implements UsuarioService {
      * @return DTO com as informações do usuário encontrado, ou nulo
      */
     @Override
-    public Usuario/*:O*/ obterUsuario(String idExterno) {
+    public Usuario obterUsuario(String idExterno) {
        
-        Usuario/*:O*/ usuarioDTO = null;
+        Usuario usuarioDTO = null;
         
         try {
 
@@ -117,8 +117,7 @@ public class UsuarioServiceImplementation implements UsuarioService {
             
             /* Se for lançada a exceção NoResultException, relança a exceção de 
             nenhum registro encontrado */
-            throw new NenhumRegistroEncontradoException(MensagensDeErro
-                    .NENHUM_REGISTRO_ENCONTRADO.getMensagemDeErro());
+            throw new NenhumRegistroEncontradoException(MensagensDeErro.NENHUM_REGISTRO_ENCONTRADO.getMensagemDeErro());
         }
         finally {
 
@@ -139,9 +138,9 @@ public class UsuarioServiceImplementation implements UsuarioService {
      * @return List com DTOS com as informações do usuário encontrado, ou nulo
      */
     @Override
-    public List<Usuario/*:O*/> obterUsuarios(String nome, int inicio, int limite) {
+    public List<Usuario> obterUsuarios(String nome, int inicio, int limite) {
 
-        List<Usuario/*:O*/> usuarios = null;
+        List<Usuario> usuarios = null;
 
         /* Obtenção dos usuários do banco de dados */
         try {
@@ -165,9 +164,9 @@ public class UsuarioServiceImplementation implements UsuarioService {
      * @return DTO com as informações do usuário encontrado, ou nulo
      */
     @Override
-    public Usuario/*:O*/ obterUsuarioPorEmail(String email) {
+    public Usuario obterUsuarioPorEmail(String email) {
         
-        Usuario/*:O*/ usuarioDTO = null;
+        Usuario usuarioDTO = null;
         
         /* Se email não for informado, evita conexão com o banco de dados */
         if (email == null || email.isEmpty()) {
@@ -201,7 +200,7 @@ public class UsuarioServiceImplementation implements UsuarioService {
     }
     
     
-    private void validarAtualizacao(Usuario/*:O*/ requisicaoFiltrada, Usuario/*:O*/ usuarioArmazenado) {
+    private void validarAtualizacao(Usuario requisicaoFiltrada, Usuario usuarioArmazenado) {
         
         if(requisicaoFiltrada.getNomeCompleto() != null)
             usuarioArmazenado.setNomeCompleto(requisicaoFiltrada.getNomeCompleto());  

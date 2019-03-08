@@ -39,10 +39,8 @@ public class AutenticacaoFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         
-        
         /* Extração dos detalhes do cabeçalho de autorização */
-        String cabecalhoDeAutorizacao = requestContext
-                .getHeaderString(HttpHeaders.AUTHORIZATION);
+        String cabecalhoDeAutorizacao = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         
         if (cabecalhoDeAutorizacao == null || !cabecalhoDeAutorizacao.startsWith("Portador")) {
             
@@ -63,14 +61,14 @@ public class AutenticacaoFilter implements ContainerRequestFilter {
       
         /* Obter detalhes do perfil do usuário */
         UsuarioService usuarioService = new UsuarioServiceImplementation();
-        Usuario/*:O*/ usuarioDTO = usuarioService.obterUsuario(idExterno);
+        Usuario usuario = usuarioService.obterUsuario(idExterno);
         
         /* Montagem do token de acesso usando 2 partes: do DB e do pedido http */
-        String tokenCompleto = usuarioDTO.getToken() + token;
+        String tokenCompleto = usuario.getToken() + token;
         
         /* Criação do token material com o idExterno recebido e o sal do banco de dados */
-        String senhaSegura = usuarioDTO.getSenhaCriptografada();
-        String sal = usuarioDTO.getSal();
+        String senhaSegura = usuario.getSenhaCriptografada();
+        String sal = usuario.getSal();
         String tokenMaterial = idExterno + sal;
         
         byte[] tokenCriptografado = null;
